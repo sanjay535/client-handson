@@ -9,12 +9,12 @@ export default function Tile(props) {
     let dataAttached = JSON.stringify({ ...data});
     event.dataTransfer.setData("dragContent", dataAttached);
     };
-
+console.log('Tile props=-',props);
   return (
     <>
       <div id={`${props.i}${props.j}`} 
       draggable={true} 
-      className='tile' 
+      className={`tile ${(props?.highlight?.r===props.i && props?.highlight?.c===props.j)?'highlight':''}`} 
       style={{backgroundColor:`rgb(${props.r},${props.g}, ${props.b})`}}
       onDragStart={(e)=>handleDragStart(e)}
       ></div>

@@ -7,6 +7,11 @@ import Source from "./Source";
 import Tile from "./Tile";
 
 export default function App() {
+  const [intialVals, setIntialVals]=useState(initializeGame());
+  /* useEffect(()=>{
+    setIntialVals(initializeGame())
+    
+  },[]); */
   const [tiles, setTiles]=useState([
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
@@ -15,13 +20,10 @@ export default function App() {
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}]
   ]);
-  const [intialVals, setIntialVals]=useState({});
   const [clickedSources, setClickedSources]=useState([]);
   const [closestColor, setClosestColor]=useState({r:0,b:0,g:0});
-  // const [deltaBetweenTarget, setDeltaBetweenTarget]=useState();
-  useEffect(()=>{
-    setIntialVals(initializeGame())
-  },[])
+  const [deltaBetweenTarget, setDeltaBetweenTarget]=useState(deltaOfColor(closestColor, {r:intialVals?.target?.at(0),g:intialVals?.target?.at(1),b:intialVals?.target?.at(2)}));
+  const [highlight, setHighLight]=useState({r:1,c:1});
   const w=10;
   const h=4;
 
@@ -206,18 +208,25 @@ export default function App() {
   }
 
   const findClosestColor=()=>{
-    let minDelta=100;
+    let minDelta=deltaBetweenTarget;
+    let color={...closestColor};
+    let newHighLight={...highlight};
     for(let i=1;i<=h;i++){
       for(let j=1;j<=w;j++){
         const delta=deltaOfColor(tiles[i][j], {r:intialVals?.target?.at(0),g:intialVals?.target?.at(1),b:intialVals?.target?.at(2)})
         if(delta<minDelta){
           minDelta=delta
+          color=tiles[i][j];
+          newHighLight={r:i,c:j}
         }
       }
     }
+    setDeltaBetweenTarget(minDelta);
+    setClosestColor(color);
+    setHighLight(newHighLight);
     console.log('minD',minDelta);
   }
-
+  console.log('deltaBetweenTarget=',deltaBetweenTarget);
   return (
     <div className="App">
       <div className="container">
@@ -225,6 +234,7 @@ export default function App() {
           <InformationLines 
           userId={intialVals.userId}
           moves={intialVals.maxMoves}
+          delta={deltaBetweenTarget}
           targetColor={{r:intialVals?.target?.at(0),g:intialVals?.target?.at(1),b:intialVals?.target?.at(2)}}
           closestColor={{r:closestColor.r,g:closestColor.g, b:closestColor.b}}
           />
@@ -240,7 +250,7 @@ export default function App() {
            {tileRow.map((tile, j)=>
            (j===0 || j===tileRow.length-1)?
            <Source {...tile} i={i} j={j} handleTileDrop={handleTileDrop} handleSourceClick={handleSourceClick} key={`${i}${j}`}/>:
-           <Tile {...tile} i={i} j={j} key={`${i}${j}`}/>
+           <Tile highlight={highlight} {...tile} i={i} j={j} key={`${i}${j}`}/>
            
            )
            }

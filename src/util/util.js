@@ -1,4 +1,5 @@
 export function deltaOfColor(color1, color2){
+    console.log('color1=',color1,' color2=',color2);
     const sqrt=Math.sqrt(Math.pow(color1.r-color2.r, 2)+Math.pow(color1.g-color2.g, 2)+ Math.pow(color1.b-color2.b, 2));
     const root3=Math.sqrt(3);
 
