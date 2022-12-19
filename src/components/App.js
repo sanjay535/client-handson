@@ -7,11 +7,14 @@ import Source from "./Source";
 import Tile from "./Tile";
 
 export default function App() {
-  const [intialVals, setIntialVals]=useState(initializeGame());
-  /* useEffect(()=>{
-    setIntialVals(initializeGame())
-    
-  },[]); */
+  const [intialVals, setIntialVals]=useState({});
+  useEffect(()=>{
+    const intial=initializeGame();
+    setIntialVals(intial);
+    setTiles(generateTiles(intial.width, intial.height));
+    setDeltaBetweenTarget(deltaOfColor(closestColor, {r:intial?.target?.at(0),g:intial?.target?.at(1),b:intial?.target?.at(2)}))
+    setMovesLeft(intial.maxMoves);
+  },[]);
   const [tiles, setTiles]=useState([
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
     [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
@@ -22,10 +25,27 @@ export default function App() {
   ]);
   const [clickedSources, setClickedSources]=useState([]);
   const [closestColor, setClosestColor]=useState({r:0,b:0,g:0});
-  const [deltaBetweenTarget, setDeltaBetweenTarget]=useState(deltaOfColor(closestColor, {r:intialVals?.target?.at(0),g:intialVals?.target?.at(1),b:intialVals?.target?.at(2)}));
+  const [deltaBetweenTarget, setDeltaBetweenTarget]=useState(100);
   const [highlight, setHighLight]=useState({r:1,c:1});
-  const w=10;
-  const h=4;
+  const [movesLeft, setMovesLeft]=useState(intialVals.maxMoves);
+  const w=intialVals.width;
+  const h=intialVals.height;
+
+  const generateTiles=(w,h)=>{
+    const tiles=[];
+    for(let i=0;i<(h+2);i++){
+      const row=[];
+      for(let j=0;j<w;j++){
+        row.push({r:0,g:0,b:0});
+      }
+      tiles.push(row);
+    }
+    for(let i=1;i<=h;i++){
+      tiles[i].push({r:0,g:0,b:0})
+      tiles[i].push({r:0,g:0,b:0})
+    }
+    return tiles;
+  }
 
   const sourceClickedTopRow=(i, j)=>{
     const clonedTiles=[...tiles];
