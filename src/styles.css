@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.source {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin: 1px;
+  border: 3px solid #ccc;
+  -moz-box-shadow: 0 0 3px #ccc;
+  -webkit-box-shadow: 0 0 3px #ccc;
+  box-shadow: 0 0 3px #ccc;
+  cursor: pointer;
+}
+.tile {
+  width: 32px;
+  height: 32px;
+  margin: 1px;
+  border: 3px solid #ccc;
+  border-radius: 5px;
+  -moz-box-shadow: 0 0 3px #ccc;
+  -webkit-box-shadow: 0 0 3px #ccc;
+  box-shadow: 0 0 3px #ccc;
+  cursor: pointer;
+}
+.row {
+  display: flex;
+}
+
+.container {
+  margin-left: 20%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* information lines */
+.moves-left, 
+.user-id,
+.game-name,
+.target-color,
+.closest-color{
+  display: flex;
+  margin: 1em 0.2em;
+}
+.target-color div,
+.closest-color div{
+  display: flex;
+  align-items: center;
+}
+.target-color div:first-child,
+.closest-color div:first-child{
+  margin-right: 0.5em;
+}
+
+/* tooltip */
+.custumize-tooltip{
+  background-color: #e6e6e6;
+  color:#000;
+  padding: 2px 5px;
+}
+.classNameArrow{
+  display: none;
+}
+
+.highlight{
+  border-color: red;
+}
