@@ -10,8 +10,8 @@ export default function Source(props) {
     event.preventDefault();
     
     let dataAttached = JSON.parse(event.dataTransfer.getData("dragContent"));
-    console.log('drop attched data=',dataAttached);
-    console.log('on drap indexes=',i,j)
+    // console.log('drop attched data=',dataAttached);
+    // console.log('on drap indexes=',i,j)
     props.handleTileDrop(i, j, dataAttached);
     return false;
     };

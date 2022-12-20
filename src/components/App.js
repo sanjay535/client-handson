@@ -146,7 +146,7 @@ export default function App() {
     }
 
     // console.log('clicked sources=',clickedSources);
-    console.log(`${i},${j}`)
+    // console.log(`${i},${j}`)
     if(i===0){
       // console.log(`Top row`);
       sourceClickedTopRow(i, j);
@@ -209,18 +209,18 @@ export default function App() {
 
   const handleTileDrop=(i, j, color)=>{
     if(i===0){
-      console.log(` Drop Top row`);
+      // console.log(` Drop Top row`);
       sourceDroppedTopRow(i, j, color);
       
     }else if(i<=h && j===0){
-      console.log(`Drop left col`);
+      // console.log(`Drop left col`);
       sourceDropedLeftCol(i, j, color);
     }else if(i===h+1){
-      console.log(`Drop bottom row`);
+      // console.log(`Drop bottom row`);
       sourceDropedBottomRow(i, j, color);
       
     }else if(j===w+1){
-      console.log(`Drop right col`);
+      // console.log(`Drop right col`);
       sourceDropedRightCol(i,j, color);
     }
     findClosestColor();
