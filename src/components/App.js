@@ -5,24 +5,23 @@ import { deltaOfColor, initializeGame, resultantColor } from "../util/util";
 import InformationLines from "./InformationLines";
 import Source from "./Source";
 import Tile from "./Tile";
+import Dialog from "./Dialog";
 
 export default function App() {
   const [intialVals, setIntialVals]=useState({});
+  const [restart, setRestart]=useState(0);
   useEffect(()=>{
     const intial=initializeGame();
     setIntialVals(intial);
     setTiles(generateTiles(intial.width, intial.height));
     setDeltaBetweenTarget(deltaOfColor(closestColor, {r:intial?.target?.at(0),g:intial?.target?.at(1),b:intial?.target?.at(2)}))
     setMovesLeft(intial.maxMoves);
-  },[]);
-  const [tiles, setTiles]=useState([
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}],
-    [{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}, {r:0,g:0,b:0}, {r:0,g:0,b:0},{r:0,g:0,b:0},{r:0,g:0,b:0}]
-  ]);
+    setHighLight({r:1,c:1});
+    setClickedSources([]);
+    setClosestColor({r:0,b:0,g:0})
+  },[restart]);
+
+  const [tiles, setTiles]=useState([]);
   const [clickedSources, setClickedSources]=useState([]);
   const [closestColor, setClosestColor]=useState({r:0,b:0,g:0});
   const [deltaBetweenTarget, setDeltaBetweenTarget]=useState(100);
@@ -146,22 +145,22 @@ export default function App() {
       return;
     }
 
-    console.log('clicked sources=',clickedSources);
+    // console.log('clicked sources=',clickedSources);
     console.log(`${i},${j}`)
     if(i===0){
-      console.log(`Top row`);
+      // console.log(`Top row`);
       sourceClickedTopRow(i, j);
       
     }else if(i<=h && j===0){
-      console.log(`left col`);
+      // console.log(`left col`);
       sourceClickedLeftCol(i, j)
       
     }else if(i===h+1){
-      console.log(`bottom row`);
+      // console.log(`bottom row`);
       sourceClickedBottomRow(i, j)
       
     }else if(j===w+1){
-      console.log(`right col`);
+      // console.log(`right col`);
        sourceClickedRightCol(i, j)
       
     }
@@ -227,7 +226,7 @@ export default function App() {
     findClosestColor();
   }
 
-  const findClosestColor=()=>{
+  const findClosestColor=async ()=>{
     let minDelta=deltaBetweenTarget;
     let color={...closestColor};
     let newHighLight={...highlight};
@@ -241,19 +240,39 @@ export default function App() {
         }
       }
     }
+    
     setDeltaBetweenTarget(minDelta);
     setClosestColor(color);
     setHighLight(newHighLight);
-    console.log('minD',minDelta);
+    setMovesLeft((movesLeft>0)?movesLeft-1:0);
+   /*  if(movesLeft===0){
+      const playerAns=await confirm("Failure! If you want to play again  press 'OK'");
+      if(playerAns){
+        setRestart(restart+1);
+      }
+    }
+    if(deltaBetweenTarget<10){
+      const playerAns=await confirm("Success! If you want to play again  press 'OK'");
+      if(playerAns){
+        setRestart(restart+1);
+      }
+    } */
+    // console.log('minD',minDelta);
   }
-  console.log('deltaBetweenTarget=',deltaBetweenTarget);
+
+  const handleRestartOnOkButtonClick=()=>{
+    setRestart(restart+1);
+  }
+  // console.log('deltaBetweenTarget=',deltaBetweenTarget);
   return (
     <div className="App">
       <div className="container">
+  
         <div className="information-lines">
+         
           <InformationLines 
           userId={intialVals.userId}
-          moves={intialVals.maxMoves}
+          moves={movesLeft}
           delta={deltaBetweenTarget}
           targetColor={{r:intialVals?.target?.at(0),g:intialVals?.target?.at(1),b:intialVals?.target?.at(2)}}
           closestColor={{r:closestColor.r,g:closestColor.g, b:closestColor.b}}
@@ -262,7 +281,7 @@ export default function App() {
         <div className="source-tiles">
          {tiles.map((tileRow, i)=>
           (i===0 || i===tiles.length-1)?
-          <div key={i} className="row" style={{marginLeft:'32px'}}>
+          <div key={i} className="row" style={{marginLeft:'20px'}}>
            {tileRow.map((source, j)=><Source {...source} i={i} j={j} handleTileDrop={handleTileDrop} handleSourceClick={handleSourceClick} key={`${i}${j}`}/>)}
           </div>
           :
@@ -280,6 +299,8 @@ export default function App() {
          }
         </div>
       </div>
+      {(movesLeft===0)?<Dialog message={"Failed! Do you want to try again?"} handleRestartOnOkButtonClick={handleRestartOnOkButtonClick}/>:''}
+      {(deltaBetweenTarget<10)?<Dialog  message={"Success! Do you want to play again?"} handleRestartOnOkButtonClick={handleRestartOnOkButtonClick}/>:''}
     </div>
   );
 }

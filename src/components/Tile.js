@@ -5,11 +5,11 @@ import 'react-tooltip/dist/react-tooltip.css';
 export default function Tile(props) {
    const handleDragStart = event => {
     const data={r:props.r,g:props.g,b:props.b};
-    console.log('dragged data=',data);
+    // console.log('dragged data=',data);
     let dataAttached = JSON.stringify({ ...data});
     event.dataTransfer.setData("dragContent", dataAttached);
     };
-console.log('Tile props=-',props);
+// console.log('Tile props=-',props);
   return (
     <>
       <div id={`${props.i}${props.j}`} 

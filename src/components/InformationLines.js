@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
 import Tile from './Tile'
 
 export default function InformationLines(props) {
-  console.log('information Lines=',props)
+  // console.log('information Lines=',props)
+  
   return (
     <div>
         <h3 className='game-name'>RGB Alchemy</h3>
