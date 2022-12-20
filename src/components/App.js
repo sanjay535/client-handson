@@ -270,7 +270,7 @@ export default function App() {
   
         <div className="information-lines">
          
-          <InformationLines 
+          <InformationLines
           userId={intialVals.userId}
           moves={movesLeft}
           delta={deltaBetweenTarget}
@@ -289,7 +289,7 @@ export default function App() {
            {tileRow.map((tile, j)=>
            (j===0 || j===tileRow.length-1)?
            <Source {...tile} i={i} j={j} handleTileDrop={handleTileDrop} handleSourceClick={handleSourceClick} key={`${i}${j}`}/>:
-           <Tile highlight={highlight} {...tile} i={i} j={j} key={`${i}${j}`}/>
+           <Tile cursor={'pointer'} draggable={true} highlight={highlight} {...tile} i={i} j={j} key={`${i}${j}`}/>
            
            )
            }

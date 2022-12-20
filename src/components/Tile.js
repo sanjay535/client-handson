@@ -13,9 +13,9 @@ export default function Tile(props) {
   return (
     <>
       <div id={`${props.i}${props.j}`} 
-      draggable={true} 
+      draggable={props.draggable} 
       className={`tile ${(props?.highlight?.r===props.i && props?.highlight?.c===props.j)?'highlight':''}`} 
-      style={{backgroundColor:`rgb(${props.r},${props.g}, ${props.b})`}}
+      style={{backgroundColor:`rgb(${props.r},${props.g}, ${props.b})`, cursor:props.cursor}}
       onDragStart={(e)=>handleDragStart(e)}
       ></div>
       <Tooltip events={['hover']} style={{backgroundColor:'#e6e6e6', color:'#000',padding:'2px 5px'}}  anchorId={`${props.i}${props.j}`} content={`${Math.floor(props.r)},${Math.floor(props.g)},${Math.floor(props.b)}`} place="bottom" />
